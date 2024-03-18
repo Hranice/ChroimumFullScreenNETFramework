@@ -86,23 +86,11 @@ namespace ChroimumFullScreenNETFramework
 
         private void OpenOptionsDialog()
         {
-            var optionsDialog = new OptionsDialog();
-            optionsDialog.textBoxUrlInput.Text = options.Url;
-            optionsDialog.textBoxIntervalInput.Text = options.RefreshInterval.ToString();
+            var optionsDialog = new OptionsDialog(options);
 
             if (optionsDialog.ShowDialog() == DialogResult.OK)
             {
-                options = new Options()
-                {
-                    Url = optionsDialog.textBoxUrlInput.Text,
-                };
-
-                Int32.TryParse(optionsDialog.textBoxIntervalInput.Text, out int interval);
-                options = new Options()
-                {
-                    Url = optionsDialog.textBoxUrlInput.Text,
-                    RefreshInterval = interval
-                };
+                options = optionsDialog.Options;
 
                 if (options.RefreshInterval == 0)
                 {
@@ -189,8 +177,14 @@ namespace ChroimumFullScreenNETFramework
             settings.LogSeverity = LogSeverity.Error;
             Cef.Initialize(settings);
             browser = new ChromiumWebBrowser(options.Url);
+            browser.LoadingStateChanged += Browser_LoadingStateChanged;
             this.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
+        }
+
+        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            Login();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -202,6 +196,35 @@ namespace ChroimumFullScreenNETFramework
         {
             unreachableDialog = new WebsiteUnreachableDialog();
             //unreachableDialog.TopMost = true;
+        }
+
+        private async void Login()
+        {
+            try
+            {
+                await browser.EvaluateScriptAsync($"document.getElementById('{options.UsernameElementId}').value = '{options.Username}';");
+                await browser.EvaluateScriptAsync($"document.getElementById('{options.PasswordElementId}').value = '{options.Password}';");
+
+
+                string script = $@"
+(function() {{
+    var buttons = document.getElementsByTagName('button');
+    var targetText = '{options.LoginButtonContent}';
+    for (var i = 0; i < buttons.length; i++) {{
+        if (buttons[i].textContent == targetText) {{
+            buttons[i].click();
+            break; // Remove this if you want to click all buttons with the specified text
+        }}
+    }}
+}})();";
+
+                await browser.EvaluateScriptAsync(script);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"An exception has occurred. {ex}");
+            }
         }
     }
 }

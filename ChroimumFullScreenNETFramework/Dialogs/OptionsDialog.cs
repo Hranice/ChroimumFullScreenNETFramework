@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChroimumFullScreenNETFramework.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,20 +17,44 @@ namespace ChroimumFullScreenNETFramework.Dialogs
         const string processName = "osk";
         Process oskProcess = Process.GetProcessesByName(processName).FirstOrDefault();
 
+        private bool _useCredentials;
+        public Options Options { get; set; }
 
-        public OptionsDialog()
+
+        public OptionsDialog(Options options)
         {
+            Options = options;
+            _useCredentials = options.UseCredentials;
             InitializeComponent();
         }
 
-        private void textBoxUrlInput_Click(object sender, EventArgs e)
+        private void VisualiseOptions()
         {
-            ReopenWindowsKeyboard();
+            textBoxUrlInput.Text = Options.Url;
+            textBoxIntervalInput.Text = Options.RefreshInterval.ToString();
+            textBoxUsernameInput.Text = Options.Username;
+            textBoxPasswordInput.Text = Options.Password;
+            textBoxUsernameElementId.Text = Options.UsernameElementId;
+            textBoxPasswordElementId.Text = Options.PasswordElementId;
+            textBoxLoginButtonContentInput.Text = Options.LoginButtonContent;
+            ToggleLoginCredentials(Options.UseCredentials);
         }
 
-        private void textBoxIntervalInput_Click(object sender, EventArgs e)
+        private void ToggleLoginCredentials(bool on)
         {
-            ReopenWindowsKeyboard();
+            if (on)
+            {
+                Width = 667;
+                buttonToggleLogin.Text = "Automatické přihlášení: aktivní";
+                buttonToggleLogin.ForeColor = Color.Lime;
+            }
+
+            else
+            {
+                Width = 282;
+                buttonToggleLogin.Text = "Automatické přihlášení: neaktivní";
+                buttonToggleLogin.ForeColor = Color.Tomato;
+            }
         }
 
         private void ReopenWindowsKeyboard()
@@ -47,6 +72,63 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             {
                 Process.Start(processName);
             }
+        }
+
+        private void textBoxUrlInput_Click(object sender, EventArgs e)
+        {
+            ReopenWindowsKeyboard();
+        }
+
+        private void textBoxIntervalInput_Click(object sender, EventArgs e)
+        {
+            ReopenWindowsKeyboard();
+        }
+
+        private void textBoxUsernameInput_Click(object sender, EventArgs e)
+        {
+            ReopenWindowsKeyboard();
+        }
+
+        private void textBoxPasswordInput_Click(object sender, EventArgs e)
+        {
+            ReopenWindowsKeyboard();
+        }
+
+        private void textBoxLoginButtonContentInput_Click(object sender, EventArgs e)
+        {
+            ReopenWindowsKeyboard();
+        }
+
+        private void buttonToggleLogin_Click(object sender, EventArgs e)
+        {
+            _useCredentials = !_useCredentials;
+            ToggleLoginCredentials(_useCredentials);
+        }
+
+        private void OptionsDialog_Load(object sender, EventArgs e)
+        {
+            VisualiseOptions();
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            Options.Url = textBoxUrlInput.Text;
+
+            try
+            {
+                Options.RefreshInterval = Convert.ToInt32(textBoxIntervalInput.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Interval obnovy musí být číselná hodnota!", ex.Message);
+            }
+
+            Options.UseCredentials = _useCredentials;
+            Options.Username = textBoxUsernameInput.Text;
+            Options.Password = textBoxPasswordInput.Text;
+            Options.LoginButtonContent = textBoxLoginButtonContentInput.Text;
+            Options.UsernameElementId = textBoxUsernameElementId.Text;
+            Options.PasswordElementId = textBoxPasswordElementId.Text;
         }
     }
 }

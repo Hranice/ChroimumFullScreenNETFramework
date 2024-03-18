@@ -47,23 +47,11 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
         private void OpenOptionsDialog()
         {
-            var optionsDialog = new OptionsDialog();
-            optionsDialog.textBoxUrlInput.Text = options.Url;
-            optionsDialog.textBoxIntervalInput.Text = options.RefreshInterval.ToString();
+            var optionsDialog = new OptionsDialog(options);
 
             if (optionsDialog.ShowDialog() == DialogResult.OK)
             {
-                options = new Options()
-                {
-                    Url = optionsDialog.textBoxUrlInput.Text,
-                };
-
-                Int32.TryParse(optionsDialog.textBoxIntervalInput.Text, out int interval);
-                options = new Options()
-                {
-                    Url = optionsDialog.textBoxUrlInput.Text,
-                    RefreshInterval = interval
-                };
+                options = optionsDialog.Options;
 
                 if (options.RefreshInterval == 0)
                 {
