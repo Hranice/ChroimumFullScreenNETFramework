@@ -20,6 +20,7 @@ namespace ChroimumFullScreenNETFramework.Models
         public string PasswordElementId { get; set; }
         public string Password { get; set; }
         public string LoginButtonContent { get; set; }
+        public int LoginPressDelay { get; set; }
 
         public static event EventHandler<OptionsErrorEventArgs> OnError;
         public static event EventHandler<EventArgs> OnChange;

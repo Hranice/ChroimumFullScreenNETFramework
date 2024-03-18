@@ -37,6 +37,7 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             textBoxUsernameElementId.Text = Options.UsernameElementId;
             textBoxPasswordElementId.Text = Options.PasswordElementId;
             textBoxLoginButtonContentInput.Text = Options.LoginButtonContent;
+            textBoxLoginClickDelay.Text = Options.LoginPressDelay.ToString();
             ToggleLoginCredentials(Options.UseCredentials);
         }
 
@@ -129,6 +130,15 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             Options.LoginButtonContent = textBoxLoginButtonContentInput.Text;
             Options.UsernameElementId = textBoxUsernameElementId.Text;
             Options.PasswordElementId = textBoxPasswordElementId.Text;
+
+            try
+            {
+                Options.LoginPressDelay = Convert.ToInt32(textBoxLoginClickDelay.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Delay prokliku musí být číselná hodnota!", ex.Message);
+            }
         }
     }
 }

@@ -47,6 +47,8 @@
             this.textBoxPasswordElementId = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxUsernameElementId = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBoxLoginClickDelay = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBoxUrlInput
@@ -278,12 +280,37 @@
             this.textBoxUsernameElementId.Size = new System.Drawing.Size(158, 33);
             this.textBoxUsernameElementId.TabIndex = 19;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label7.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.label7.Location = new System.Drawing.Point(485, 157);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(123, 23);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Delay na stisk:";
+            // 
+            // textBoxLoginClickDelay
+            // 
+            this.textBoxLoginClickDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
+            this.textBoxLoginClickDelay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxLoginClickDelay.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.textBoxLoginClickDelay.ForeColor = System.Drawing.Color.White;
+            this.textBoxLoginClickDelay.Location = new System.Drawing.Point(489, 184);
+            this.textBoxLoginClickDelay.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxLoginClickDelay.Name = "textBoxLoginClickDelay";
+            this.textBoxLoginClickDelay.Size = new System.Drawing.Size(158, 33);
+            this.textBoxLoginClickDelay.TabIndex = 23;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(667, 270);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.textBoxLoginClickDelay);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBoxPasswordElementId);
             this.Controls.Add(this.label9);
@@ -335,5 +362,7 @@
         public System.Windows.Forms.TextBox textBoxPasswordElementId;
         private System.Windows.Forms.Label label9;
         public System.Windows.Forms.TextBox textBoxUsernameElementId;
+        private System.Windows.Forms.Label label7;
+        public System.Windows.Forms.TextBox textBoxLoginClickDelay;
     }
 }

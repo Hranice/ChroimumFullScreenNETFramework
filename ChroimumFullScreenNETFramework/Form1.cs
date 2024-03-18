@@ -11,9 +11,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -130,15 +132,28 @@ namespace ChroimumFullScreenNETFramework
         {
             try
             {
-                PingReply reply = await _ping.SendPingAsync(options.Url.Split(':')[0]);
-                if (reply.Status != IPStatus.Success)
+                string pattern = @"\b(\d{1,3}\.){3}\d{1,3}\b";
+                Match match = Regex.Match(options.Url, pattern);
+
+                if (match.Success)
                 {
-                    HandleFailure();
+                    string ipAddress = match.Value;
+                    PingReply reply = await _ping.SendPingAsync(ipAddress);
+
+                    if (reply.Status != IPStatus.Success)
+                    {
+                        HandleFailure();
+                    }
+
+                    else
+                    {
+                        HandleSuccess();
+                    }
                 }
 
                 else
                 {
-                    HandleSuccess();
+                    HandleFailure();
                 }
             }
             catch
@@ -174,6 +189,7 @@ namespace ChroimumFullScreenNETFramework
         private void InitializeChromium()
         {
             CefSettings settings = new CefSettings();
+            settings.IgnoreCertificateErrors = true;
             settings.LogSeverity = LogSeverity.Error;
             Cef.Initialize(settings);
             browser = new ChromiumWebBrowser(options.Url);
@@ -198,32 +214,48 @@ namespace ChroimumFullScreenNETFramework
             //unreachableDialog.TopMost = true;
         }
 
-        private async void Login()
+        private void Login()
         {
             try
             {
-                await browser.EvaluateScriptAsync($"document.getElementById('{options.UsernameElementId}').value = '{options.Username}';");
-                await browser.EvaluateScriptAsync($"document.getElementById('{options.PasswordElementId}').value = '{options.Password}';");
+                // JavaScript to ensure elements are ready and then log in
+                string loginScript = $@"
+            function triggerMouseEvent (node, eventType) {{
+                var clickEvent = document.createEvent ('MouseEvents');
+                clickEvent.initEvent (eventType, true, true);
+                node.dispatchEvent (clickEvent);
+            }}
 
+            function attemptLogin() {{
+                var usernameField = document.getElementById('{options.UsernameElementId}');
+                var passwordField = document.getElementById('{options.PasswordElementId}');
+                var loginButton = document.querySelector('div[data-ui=""login-button""]');
 
-                string script = $@"
-(function() {{
-    var buttons = document.getElementsByTagName('button');
-    var targetText = '{options.LoginButtonContent}';
-    for (var i = 0; i < buttons.length; i++) {{
-        if (buttons[i].textContent == targetText) {{
-            buttons[i].click();
-            break; // Remove this if you want to click all buttons with the specified text
-        }}
-    }}
-}})();";
+                if (usernameField && passwordField && loginButton) {{
+                    usernameField.value = '{options.Username}';
+                    passwordField.value = '{options.Password}';
+                    
+                    // Simulate mouse events for more complex interactions
+                    triggerMouseEvent (loginButton, 'mouseover');
+                    triggerMouseEvent (loginButton, 'mousedown');
+                    triggerMouseEvent (loginButton, 'mouseup');
+                    triggerMouseEvent (loginButton, 'click');
+                }} else {{
+                    // Retry after a short delay if elements are not available
+                    setTimeout(attemptLogin, {options.LoginPressDelay});
+                }}
+            }}
 
-                await browser.EvaluateScriptAsync(script);
+            // Start the login attempt process
+            attemptLogin();
+        ";
 
+                // Execute the script when the page is loaded
+                browser.ExecuteScriptAsyncWhenPageLoaded(loginScript);
             }
             catch (Exception ex)
             {
-                _logger.Error($"An exception has occurred. {ex}");
+                _logger.Error($"An exception has occurred: {ex}");
             }
         }
     }
