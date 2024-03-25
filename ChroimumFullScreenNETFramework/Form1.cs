@@ -73,8 +73,9 @@ namespace ChroimumFullScreenNETFramework
         private void OpenOptionsDialog()
         {
             var optionsDialog = new OptionsDialog(options);
+            optionsDialog.Owner = this;
 
-            if (optionsDialog.ShowDialog() == DialogResult.OK)
+            if (optionsDialog.ShowDialog(this) == DialogResult.OK)
             {
                 options = optionsDialog.Options;
 
