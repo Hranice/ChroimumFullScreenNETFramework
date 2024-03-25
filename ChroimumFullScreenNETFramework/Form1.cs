@@ -224,14 +224,8 @@ namespace ChroimumFullScreenNETFramework
             settings.LogSeverity = LogSeverity.Error;
             Cef.Initialize(settings);
             browser = new ChromiumWebBrowser(options.Url);
-            browser.LoadingStateChanged += Browser_LoadingStateChanged;
             this.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
-        }
-
-        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            Login();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -242,55 +236,6 @@ namespace ChroimumFullScreenNETFramework
         private void Form1_Load(object sender, EventArgs e)
         {
             unreachableDialog = new WebsiteUnreachableDialog();
-            //unreachableDialog.TopMost = true;
-        }
-
-        private void Login()
-        {
-            if (options.UseCredentials)
-            {
-                try
-                {
-                    // JavaScript to ensure elements are ready and then log in
-                    string loginScript = $@"
-            function triggerMouseEvent (node, eventType) {{
-                var clickEvent = document.createEvent ('MouseEvents');
-                clickEvent.initEvent (eventType, true, true);
-                node.dispatchEvent (clickEvent);
-            }}
-
-            function attemptLogin() {{
-                var usernameField = document.getElementById('{options.UsernameElementId}');
-                var passwordField = document.getElementById('{options.PasswordElementId}');
-                var loginButton = document.querySelector('div[data-ui=""login-button""]');
-
-                if (usernameField && passwordField && loginButton) {{
-                    usernameField.value = '{options.Username}';
-                    passwordField.value = '{options.Password}';
-                    
-                    // Simulate mouse events for more complex interactions
-                    triggerMouseEvent (loginButton, 'mouseover');
-                    triggerMouseEvent (loginButton, 'mousedown');
-                    triggerMouseEvent (loginButton, 'mouseup');
-                    triggerMouseEvent (loginButton, 'click');
-                }} else {{
-                    // Retry after a short delay if elements are not available
-                    setTimeout(attemptLogin, {options.LoginPressDelay});
-                }}
-            }}
-
-            // Start the login attempt process
-            attemptLogin();
-        ";
-
-                    // Execute the script when the page is loaded
-                    browser.ExecuteScriptAsyncWhenPageLoaded(loginScript);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error($"An exception has occurred: {ex}");
-                }
-            }
         }
     }
 }

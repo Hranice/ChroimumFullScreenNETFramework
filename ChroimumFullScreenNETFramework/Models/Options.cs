@@ -15,13 +15,6 @@ namespace ChroimumFullScreenNETFramework.Models
         public string Url { get; set; }
         public int RefreshInterval { get; set; }
         public int PingTimeout { get; set; }
-        public bool UseCredentials { get; set; }
-        public string UsernameElementId { get; set; }
-        public string Username { get; set; }
-        public string PasswordElementId { get; set; }
-        public string Password { get; set; }
-        public string LoginButtonContent { get; set; }
-        public int LoginPressDelay { get; set; }
 
         public static event EventHandler<OptionsErrorEventArgs> OnError;
         public static event EventHandler<EventArgs> OnChange;

@@ -35,22 +35,8 @@
             this.textBoxIntervalInput = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxUsernameInput = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBoxPasswordInput = new System.Windows.Forms.TextBox();
-            this.buttonToggleLogin = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBoxLoginButtonContentInput = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBoxPasswordElementId = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBoxUsernameElementId = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBoxLoginClickDelay = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxPingTimeoutInput = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -97,7 +83,7 @@
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Calibri Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.buttonSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(214)))), ((int)(((byte)(16)))));
-            this.buttonSave.Location = new System.Drawing.Point(12, 223);
+            this.buttonSave.Location = new System.Drawing.Point(12, 157);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(159, 34);
             this.buttonSave.TabIndex = 6;
@@ -127,7 +113,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Calibri Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button2.Location = new System.Drawing.Point(177, 223);
+            this.button2.Location = new System.Drawing.Point(177, 157);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(87, 34);
             this.button2.TabIndex = 9;
@@ -145,167 +131,6 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "ms";
             // 
-            // textBoxUsernameInput
-            // 
-            this.textBoxUsernameInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxUsernameInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxUsernameInput.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxUsernameInput.ForeColor = System.Drawing.Color.White;
-            this.textBoxUsernameInput.Location = new System.Drawing.Point(305, 36);
-            this.textBoxUsernameInput.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxUsernameInput.Name = "textBoxUsernameInput";
-            this.textBoxUsernameInput.Size = new System.Drawing.Size(158, 33);
-            this.textBoxUsernameInput.TabIndex = 11;
-            this.textBoxUsernameInput.Click += new System.EventHandler(this.textBoxUsernameInput_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label4.Location = new System.Drawing.Point(301, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 23);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Přihlašovací jméno:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label5.Location = new System.Drawing.Point(299, 82);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 23);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Heslo:";
-            // 
-            // textBoxPasswordInput
-            // 
-            this.textBoxPasswordInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxPasswordInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxPasswordInput.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxPasswordInput.ForeColor = System.Drawing.Color.White;
-            this.textBoxPasswordInput.Location = new System.Drawing.Point(303, 109);
-            this.textBoxPasswordInput.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxPasswordInput.Name = "textBoxPasswordInput";
-            this.textBoxPasswordInput.Size = new System.Drawing.Size(158, 33);
-            this.textBoxPasswordInput.TabIndex = 13;
-            this.textBoxPasswordInput.Click += new System.EventHandler(this.textBoxPasswordInput_Click);
-            // 
-            // buttonToggleLogin
-            // 
-            this.buttonToggleLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonToggleLogin.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.buttonToggleLogin.Location = new System.Drawing.Point(12, 166);
-            this.buttonToggleLogin.Name = "buttonToggleLogin";
-            this.buttonToggleLogin.Size = new System.Drawing.Size(252, 51);
-            this.buttonToggleLogin.TabIndex = 15;
-            this.buttonToggleLogin.Text = "Automatické přihlášení: aktivní";
-            this.buttonToggleLogin.UseVisualStyleBackColor = true;
-            this.buttonToggleLogin.Click += new System.EventHandler(this.buttonToggleLogin_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label6.Location = new System.Drawing.Point(299, 157);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(154, 23);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "Text login tlačítka:";
-            // 
-            // textBoxLoginButtonContentInput
-            // 
-            this.textBoxLoginButtonContentInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxLoginButtonContentInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxLoginButtonContentInput.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxLoginButtonContentInput.ForeColor = System.Drawing.Color.White;
-            this.textBoxLoginButtonContentInput.Location = new System.Drawing.Point(303, 184);
-            this.textBoxLoginButtonContentInput.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxLoginButtonContentInput.Name = "textBoxLoginButtonContentInput";
-            this.textBoxLoginButtonContentInput.Size = new System.Drawing.Size(158, 33);
-            this.textBoxLoginButtonContentInput.TabIndex = 16;
-            this.textBoxLoginButtonContentInput.Click += new System.EventHandler(this.textBoxLoginButtonContentInput_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.DarkGray;
-            this.panel1.Location = new System.Drawing.Point(282, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1, 230);
-            this.panel1.TabIndex = 18;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label8.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label8.Location = new System.Drawing.Point(485, 82);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(96, 23);
-            this.label8.TabIndex = 22;
-            this.label8.Text = "ElementId:";
-            // 
-            // textBoxPasswordElementId
-            // 
-            this.textBoxPasswordElementId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxPasswordElementId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxPasswordElementId.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxPasswordElementId.ForeColor = System.Drawing.Color.White;
-            this.textBoxPasswordElementId.Location = new System.Drawing.Point(489, 109);
-            this.textBoxPasswordElementId.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxPasswordElementId.Name = "textBoxPasswordElementId";
-            this.textBoxPasswordElementId.Size = new System.Drawing.Size(158, 33);
-            this.textBoxPasswordElementId.TabIndex = 21;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label9.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label9.Location = new System.Drawing.Point(487, 9);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(96, 23);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "ElementId:";
-            // 
-            // textBoxUsernameElementId
-            // 
-            this.textBoxUsernameElementId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxUsernameElementId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxUsernameElementId.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxUsernameElementId.ForeColor = System.Drawing.Color.White;
-            this.textBoxUsernameElementId.Location = new System.Drawing.Point(491, 36);
-            this.textBoxUsernameElementId.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxUsernameElementId.Name = "textBoxUsernameElementId";
-            this.textBoxUsernameElementId.Size = new System.Drawing.Size(158, 33);
-            this.textBoxUsernameElementId.TabIndex = 19;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label7.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label7.Location = new System.Drawing.Point(485, 157);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(123, 23);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "Delay na stisk:";
-            // 
-            // textBoxLoginClickDelay
-            // 
-            this.textBoxLoginClickDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBoxLoginClickDelay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxLoginClickDelay.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBoxLoginClickDelay.ForeColor = System.Drawing.Color.White;
-            this.textBoxLoginClickDelay.Location = new System.Drawing.Point(489, 184);
-            this.textBoxLoginClickDelay.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxLoginClickDelay.Name = "textBoxLoginClickDelay";
-            this.textBoxLoginClickDelay.Size = new System.Drawing.Size(158, 33);
-            this.textBoxLoginClickDelay.TabIndex = 23;
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -317,18 +142,18 @@
             this.label10.TabIndex = 27;
             this.label10.Text = "ms";
             // 
-            // textBox1
+            // textBoxPingTimeoutInput
             // 
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(155, 109);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(69, 33);
-            this.textBox1.TabIndex = 26;
-            this.textBox1.Text = "1000";
+            this.textBoxPingTimeoutInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
+            this.textBoxPingTimeoutInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxPingTimeoutInput.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.textBoxPingTimeoutInput.ForeColor = System.Drawing.Color.White;
+            this.textBoxPingTimeoutInput.Location = new System.Drawing.Point(155, 109);
+            this.textBoxPingTimeoutInput.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPingTimeoutInput.Name = "textBoxPingTimeoutInput";
+            this.textBoxPingTimeoutInput.Size = new System.Drawing.Size(69, 33);
+            this.textBoxPingTimeoutInput.TabIndex = 26;
+            this.textBoxPingTimeoutInput.Text = "1000";
             // 
             // label11
             // 
@@ -346,24 +171,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
-            this.ClientSize = new System.Drawing.Size(667, 270);
+            this.ClientSize = new System.Drawing.Size(276, 204);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxPingTimeoutInput);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBoxLoginClickDelay);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.textBoxPasswordElementId);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.textBoxUsernameElementId);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBoxLoginButtonContentInput);
-            this.Controls.Add(this.buttonToggleLogin);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBoxPasswordInput);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBoxUsernameInput);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBoxIntervalInput);
@@ -391,22 +202,8 @@
         public System.Windows.Forms.TextBox textBoxIntervalInput;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label3;
-        public System.Windows.Forms.TextBox textBoxUsernameInput;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.TextBox textBoxPasswordInput;
-        private System.Windows.Forms.Button buttonToggleLogin;
-        private System.Windows.Forms.Label label6;
-        public System.Windows.Forms.TextBox textBoxLoginButtonContentInput;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label8;
-        public System.Windows.Forms.TextBox textBoxPasswordElementId;
-        private System.Windows.Forms.Label label9;
-        public System.Windows.Forms.TextBox textBoxUsernameElementId;
-        private System.Windows.Forms.Label label7;
-        public System.Windows.Forms.TextBox textBoxLoginClickDelay;
         private System.Windows.Forms.Label label10;
-        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox textBoxPingTimeoutInput;
         private System.Windows.Forms.Label label11;
     }
 }

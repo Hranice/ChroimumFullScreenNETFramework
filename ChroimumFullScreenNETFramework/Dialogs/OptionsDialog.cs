@@ -14,17 +14,12 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 {
     public partial class OptionsDialog : Form
     {
-        const string processName = "osk";
-        Process oskProcess = Process.GetProcessesByName(processName).FirstOrDefault();
-
-        private bool _useCredentials;
         public Options Options { get; set; }
 
 
         public OptionsDialog(Options options)
         {
             Options = options;
-            _useCredentials = options.UseCredentials;
             InitializeComponent();
         }
 
@@ -32,46 +27,22 @@ namespace ChroimumFullScreenNETFramework.Dialogs
         {
             textBoxUrlInput.Text = Options.Url;
             textBoxIntervalInput.Text = Options.RefreshInterval.ToString();
-            textBoxUsernameInput.Text = Options.Username;
-            textBoxPasswordInput.Text = Options.Password;
-            textBoxUsernameElementId.Text = Options.UsernameElementId;
-            textBoxPasswordElementId.Text = Options.PasswordElementId;
-            textBoxLoginButtonContentInput.Text = Options.LoginButtonContent;
-            textBoxLoginClickDelay.Text = Options.LoginPressDelay.ToString();
-            ToggleLoginCredentials(Options.UseCredentials);
-        }
-
-        private void ToggleLoginCredentials(bool on)
-        {
-            if (on)
-            {
-                Width = 667;
-                buttonToggleLogin.Text = "Automatické přihlášení: aktivní";
-                buttonToggleLogin.ForeColor = Color.Lime;
-            }
-
-            else
-            {
-                Width = 282;
-                buttonToggleLogin.Text = "Automatické přihlášení: neaktivní";
-                buttonToggleLogin.ForeColor = Color.Tomato;
-            }
+            textBoxPingTimeoutInput.Text = Options.PingTimeout.ToString();
         }
 
         private void ReopenWindowsKeyboard()
         {
-            if (oskProcess != null)
+            bool isOskRunning = false;
+            Process[] processes = Process.GetProcessesByName("osk");
+            if (processes.Length > 0)
             {
-                try
-                {
-                    oskProcess.Kill();
-                    Process.Start(processName);
-                }
-                catch { }
+                isOskRunning = true;
             }
-            else
+
+            // If OSK is not running, start it
+            if (!isOskRunning)
             {
-                Process.Start(processName);
+                Process.Start("osk.exe");
             }
         }
 
@@ -85,27 +56,6 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             ReopenWindowsKeyboard();
         }
 
-        private void textBoxUsernameInput_Click(object sender, EventArgs e)
-        {
-            ReopenWindowsKeyboard();
-        }
-
-        private void textBoxPasswordInput_Click(object sender, EventArgs e)
-        {
-            ReopenWindowsKeyboard();
-        }
-
-        private void textBoxLoginButtonContentInput_Click(object sender, EventArgs e)
-        {
-            ReopenWindowsKeyboard();
-        }
-
-        private void buttonToggleLogin_Click(object sender, EventArgs e)
-        {
-            _useCredentials = !_useCredentials;
-            ToggleLoginCredentials(_useCredentials);
-        }
-
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
             VisualiseOptions();
@@ -113,32 +63,24 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            Options.Url = textBoxUrlInput.Text;
+            Options.Url = textBoxUrlInput.Text.Trim();
 
-            try
+            // Attempt to parse the refresh interval from the textBox
+            if (!int.TryParse(textBoxIntervalInput.Text, out int interval))
             {
-                Options.RefreshInterval = Convert.ToInt32(textBoxIntervalInput.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Interval obnovy musí být číselná hodnota!", ex.Message);
+                MessageBox.Show("The Refresh Interval must be a numeric value!", "Input Error");
+                return;
             }
 
-            Options.UseCredentials = _useCredentials;
-            Options.Username = textBoxUsernameInput.Text;
-            Options.Password = textBoxPasswordInput.Text;
-            Options.LoginButtonContent = textBoxLoginButtonContentInput.Text;
-            Options.UsernameElementId = textBoxUsernameElementId.Text;
-            Options.PasswordElementId = textBoxPasswordElementId.Text;
+            // Attempt to parse the ping timeout from the textBox
+            if (!int.TryParse(textBoxPingTimeoutInput.Text, out int pingTimeout))
+            {
+                MessageBox.Show("The Ping Timeout must be a numeric value!", "Input Error");
+                return;            }
 
-            try
-            {
-                Options.LoginPressDelay = Convert.ToInt32(textBoxLoginClickDelay.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Delay prokliku musí být číselná hodnota!", ex.Message);
-            }
+            // If both parsing operations succeed, update the options
+            Options.RefreshInterval = interval;
+            Options.PingTimeout = pingTimeout;
         }
     }
 }
