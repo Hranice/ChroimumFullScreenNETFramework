@@ -30,8 +30,6 @@ namespace ChroimumFullScreenNETFramework
         private bool unreachableDialogShown;
 
         private static Ping _ping;
-        private HttpClient httpClient;
-        private bool isCheckingUrl = false;
         private Options options;
 
         private static readonly ILogger _logger = Log.ForContext<Form1>();
@@ -50,10 +48,6 @@ namespace ChroimumFullScreenNETFramework
             InitializeChromium();
             SetupTimer();
             MakeFormFullscreen();
-
-            httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMilliseconds(1000);
-
         }
 
         private void Reload()
