@@ -7,6 +7,7 @@ using System;
 using System.Drawing;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -14,6 +15,15 @@ namespace ChroimumFullScreenNETFramework
 {
     public partial class Form1 : Form
     {
+        // Import the necessary DLLs for simulating key presses
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+
+        // Virtual-Key codes
+        const byte VK_LWIN = 0x5B; // Left Windows key (Natural keyboard)
+        const int KEYEVENTF_EXTENDEDKEY = 0x0001; // Key down flag
+        const int KEYEVENTF_KEYUP = 0x0002; // Key up flag
+
         private ChromiumWebBrowser browser;
         private Timer checkUrlTimer;
         private WebsiteUnreachableDialog unreachableDialog;
@@ -201,6 +211,8 @@ namespace ChroimumFullScreenNETFramework
             {
                 _logger.Information($"Connected to '{options.Url}'.");
                 Enabled = true;
+                if (unreachableDialog == null)
+                    unreachableDialog = new WebsiteUnreachableDialog();
                 unreachableDialog.Hide();
                 unreachableDialogShown = false;
                 browser.Reload();
@@ -213,6 +225,8 @@ namespace ChroimumFullScreenNETFramework
             {
                 _logger.Warning($"Disconnected from '{options.Url}'. Refreshing interval is set to {options.RefreshInterval}");
                 Enabled = false;
+                if (unreachableDialog == null)
+                    unreachableDialog = new WebsiteUnreachableDialog();
                 unreachableDialog.Show();
                 unreachableDialogShown = true;
             }
@@ -239,10 +253,8 @@ namespace ChroimumFullScreenNETFramework
 
             if (message != null && message.type == "double-click")
             {
-                if (InvokeRequired)
-                    BeginInvoke(new Action(() => this.WindowState = FormWindowState.Minimized));
-                else
-                    this.WindowState = FormWindowState.Minimized;
+                keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
             }
         }
 
@@ -251,20 +263,56 @@ namespace ChroimumFullScreenNETFramework
         {
             if (!e.IsLoading)
             {
-                // Page has finished loading, inject JavaScript
+                // Page has finished loading, inject JavaScript to handle both double-click and double-tap
                 browser.ExecuteScriptAsync(@"
-            document.addEventListener('dblclick', function(event) {
-                const rect = { left: 10, top: 10, width: 50, height: 50 };
-                const x = event.clientX;
-                const y = event.clientY;
-
-                if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
-                    CefSharp.PostMessage({ type: 'double-click', x: x, y: y });
+        let lastTapTime = 0;
+        let lastTapX = 0;
+        let lastTapY = 0;
+        
+        // Function to check if the event is within the specified rectangle
+        function isWithinRectangle(x, y, rect) {
+            return x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height;
+        }
+        
+        // Handle touchend event for double-tap detection
+        document.addEventListener('touchend', function(event) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            const rect = { left: 10, top: 10, width: 50, height: 50 };
+            
+            // Get touch point
+            const touch = event.changedTouches[0];
+            const x = touch.clientX;
+            const y = touch.clientY;
+            
+            // Check for double-tap
+            if(tapLength < 500 && Math.abs(x - lastTapX) < 50 && Math.abs(y - lastTapY) < 50) {
+                if(isWithinRectangle(x, y, rect)) {
+                    CefSharp.PostMessage({ type: 'double-tap', x: x, y: y });
                 }
-            });
+            }
+            
+            // Remember the time and position of this tap
+            lastTapTime = currentTime;
+            lastTapX = x;
+            lastTapY = y;
+        });
+
+        // Handle dblclick event for mouse double-click detection
+        document.addEventListener('dblclick', function(event) {
+            const rect = { left: 10, top: 10, width: 50, height: 50 };
+            const x = event.clientX;
+            const y = event.clientY;
+
+            if(isWithinRectangle(x, y, rect)) {
+                CefSharp.PostMessage({ type: 'double-click', x: x, y: y });
+            }
+        });
         ");
             }
         }
+
+
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
