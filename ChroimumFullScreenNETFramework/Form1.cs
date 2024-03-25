@@ -4,6 +4,7 @@ using ChroimumFullScreenNETFramework.Dialogs;
 using ChroimumFullScreenNETFramework.Models;
 using Serilog;
 using System;
+using System.Drawing;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
@@ -226,6 +227,42 @@ namespace ChroimumFullScreenNETFramework
             browser = new ChromiumWebBrowser(options.Url);
             this.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
+
+            browser.JavascriptMessageReceived += OnJavascriptMessageReceived;
+            browser.LoadingStateChanged += OnLoadingStateChanged;
+        }
+
+        private void OnJavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
+        {
+            dynamic message = e.Message;
+
+            if (message != null && message.type == "double-click")
+            {
+                if (InvokeRequired)
+                    BeginInvoke(new Action(() => this.WindowState = FormWindowState.Minimized));
+                else
+                    this.WindowState = FormWindowState.Minimized;
+            }
+        }
+
+
+        private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (!e.IsLoading)
+            {
+                // Page has finished loading, inject JavaScript
+                browser.ExecuteScriptAsync(@"
+            document.addEventListener('dblclick', function(event) {
+                const rect = { left: 10, top: 10, width: 50, height: 50 };
+                const x = event.clientX;
+                const y = event.clientY;
+
+                if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
+                    CefSharp.PostMessage({ type: 'double-click', x: x, y: y });
+                }
+            });
+        ");
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
