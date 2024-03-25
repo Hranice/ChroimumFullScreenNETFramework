@@ -1,27 +1,13 @@
 ﻿using CefSharp;
-using CefSharp.DevTools.Autofill;
-using CefSharp.DevTools.Page;
 using CefSharp.WinForms;
 using ChroimumFullScreenNETFramework.Dialogs;
 using ChroimumFullScreenNETFramework.Models;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace ChroimumFullScreenNETFramework
 {
