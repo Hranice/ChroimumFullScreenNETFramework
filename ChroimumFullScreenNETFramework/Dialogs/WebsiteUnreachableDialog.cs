@@ -37,7 +37,6 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
         private void WebsiteUnreachableDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Environment.Exit(0);
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -61,21 +60,12 @@ namespace ChroimumFullScreenNETFramework.Dialogs
                 }
 
                 Options.Save(options);
-
-                Restart();
+                ReloadOptions();
             }
-        }
-
-        private void Restart()
-        {
-            string currentAppName = Process.GetCurrentProcess().MainModule.FileName;
-            Process.Start(currentAppName);
-            Environment.Exit(0);
         }
 
         private void label4_Click(object sender, EventArgs e)
         {
-            Restart();
         }
     }
 }

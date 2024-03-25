@@ -1,4 +1,5 @@
 ﻿using CefSharp;
+using CefSharp.DevTools.Autofill;
 using CefSharp.DevTools.Page;
 using CefSharp.WinForms;
 using ChroimumFullScreenNETFramework.Dialogs;
@@ -9,11 +10,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -97,15 +100,8 @@ namespace ChroimumFullScreenNETFramework
 
                 Options.Save(options);
 
-                Restart();
+                Reload();
             }
-        }
-
-        private void Restart()
-        {
-            string currentAppName = Process.GetCurrentProcess().MainModule.FileName;
-            Process.Start(currentAppName);
-            Environment.Exit(0);
         }
 
         private void MakeFormFullscreen()
@@ -116,23 +112,33 @@ namespace ChroimumFullScreenNETFramework
 
         private void SetupTimer()
         {
-            checkUrlTimer = new Timer();
+            if (checkUrlTimer == null)
+            {
+                checkUrlTimer = new Timer();
+                checkUrlTimer.Tick += CheckUrlAccessibility;
+            }
+
             checkUrlTimer.Interval = options.RefreshInterval;
-            checkUrlTimer.Tick += CheckUrlAccessibility;
             checkUrlTimer.Start();
         }
 
         private async void CheckUrlAccessibility(object sender, EventArgs e)
         {
+            checkUrlTimer.Enabled = false;
+
             try
             {
-                string pattern = @"\b(\d{1,3}\.){3}\d{1,3}\b";
-                Match match = Regex.Match(options.Url, pattern);
+                string url = PrepareInput(options.Url);
 
-                if (match.Success)
+                if (IsValidUrlOrIPAddress(url))
                 {
-                    string ipAddress = match.Value;
-                    PingReply reply = await _ping.SendPingAsync(ipAddress);
+                    // Extract the hostname
+                    string hostname = new Uri(url).Host;
+
+                    // Get the IP addresses
+                    IPAddress[] ipAddresses = Dns.GetHostAddresses(hostname);
+
+                    PingReply reply = await _ping.SendPingAsync(ipAddresses[0]);
 
                     if (reply.Status != IPStatus.Success)
                     {
@@ -147,14 +153,59 @@ namespace ChroimumFullScreenNETFramework
 
                 else
                 {
+                    _logger.Error("not valid url or ip address." + url);
                     HandleFailure();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Error(ex.Message);
                 HandleFailure();
             }
+
+            finally
+            {
+                checkUrlTimer.Enabled = true;
+            }
         }
+
+        static bool IsValidUrlOrIPAddress(string input)
+        {
+            // Regular expression to check if the string is a valid URL (including those with IP addresses)
+            string urlPattern = @"^(http|https|ftp)://[a-zA-Z0-9\-\.]+(:[0-9]+)?(/.*)?$";
+            // More accurate IP address pattern for IPv4
+            string ipPattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+            // Check if it is a valid URL or an IP address
+            return Regex.IsMatch(input, urlPattern) || Regex.IsMatch(input, ipPattern);
+        }
+
+
+        static string PrepareInput(string input)
+        {
+            // Regular expression to check for valid IP address
+            string ipPattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+            // Strip scheme if present
+            string inputWithoutScheme = Regex.Replace(input, @"^(http|https|ftp)://", "");
+
+            // If the stripped input is a valid IP address, return it with 'http://' prefixed (only if needed for subsequent operations)
+            if (Regex.IsMatch(inputWithoutScheme, ipPattern))
+            {
+                return input.StartsWith("http") ? input : "http://" + inputWithoutScheme;
+            }
+
+            // Regular expression to check if scheme is missing
+            string schemePattern = @"^(http|https|ftp)://";
+
+            // If the original input does not start with a scheme, prepend "http://"
+            if (!Regex.IsMatch(input, schemePattern))
+            {
+                return "http://" + input;
+            }
+
+            return input;
+        }
+
 
         private void HandleSuccess()
         {
@@ -210,10 +261,12 @@ namespace ChroimumFullScreenNETFramework
 
         private void Login()
         {
-            try
+            if (options.UseCredentials)
             {
-                // JavaScript to ensure elements are ready and then log in
-                string loginScript = $@"
+                try
+                {
+                    // JavaScript to ensure elements are ready and then log in
+                    string loginScript = $@"
             function triggerMouseEvent (node, eventType) {{
                 var clickEvent = document.createEvent ('MouseEvents');
                 clickEvent.initEvent (eventType, true, true);
@@ -244,12 +297,13 @@ namespace ChroimumFullScreenNETFramework
             attemptLogin();
         ";
 
-                // Execute the script when the page is loaded
-                browser.ExecuteScriptAsyncWhenPageLoaded(loginScript);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"An exception has occurred: {ex}");
+                    // Execute the script when the page is loaded
+                    browser.ExecuteScriptAsyncWhenPageLoaded(loginScript);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"An exception has occurred: {ex}");
+                }
             }
         }
     }
