@@ -124,7 +124,7 @@ namespace ChroimumFullScreenNETFramework
                     // Get the IP addresses
                     IPAddress[] ipAddresses = Dns.GetHostAddresses(hostname);
 
-                    PingReply reply = await _ping.SendPingAsync(ipAddresses[0]);
+                    PingReply reply = await _ping.SendPingAsync(ipAddresses[0], options.PingTimeout);
 
                     if (reply.Status != IPStatus.Success)
                     {

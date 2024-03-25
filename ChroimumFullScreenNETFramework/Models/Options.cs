@@ -14,6 +14,7 @@ namespace ChroimumFullScreenNETFramework.Models
     {
         public string Url { get; set; }
         public int RefreshInterval { get; set; }
+        public int PingTimeout { get; set; }
         public bool UseCredentials { get; set; }
         public string UsernameElementId { get; set; }
         public string Username { get; set; }

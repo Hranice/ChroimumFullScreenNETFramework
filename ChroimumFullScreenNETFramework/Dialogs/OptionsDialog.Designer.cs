@@ -49,6 +49,9 @@
             this.textBoxUsernameElementId = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxLoginClickDelay = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxUrlInput
@@ -82,9 +85,9 @@
             this.label2.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label2.Location = new System.Drawing.Point(9, 82);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(223, 23);
+            this.label2.Size = new System.Drawing.Size(139, 23);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Interval kontroly připojení:";
+            this.label2.Text = "Interval obnovy:";
             // 
             // buttonSave
             // 
@@ -111,7 +114,7 @@
             this.textBoxIntervalInput.Location = new System.Drawing.Point(13, 109);
             this.textBoxIntervalInput.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxIntervalInput.Name = "textBoxIntervalInput";
-            this.textBoxIntervalInput.Size = new System.Drawing.Size(158, 33);
+            this.textBoxIntervalInput.Size = new System.Drawing.Size(69, 33);
             this.textBoxIntervalInput.TabIndex = 8;
             this.textBoxIntervalInput.Text = "1000";
             this.textBoxIntervalInput.Click += new System.EventHandler(this.textBoxIntervalInput_Click);
@@ -136,7 +139,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label3.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label3.Location = new System.Drawing.Point(178, 113);
+            this.label3.Location = new System.Drawing.Point(89, 113);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(33, 23);
             this.label3.TabIndex = 10;
@@ -303,12 +306,50 @@
             this.textBoxLoginClickDelay.Size = new System.Drawing.Size(158, 33);
             this.textBoxLoginClickDelay.TabIndex = 23;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label10.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.label10.Location = new System.Drawing.Point(231, 113);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(33, 23);
+            this.label10.TabIndex = 27;
+            this.label10.Text = "ms";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox1.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.textBox1.ForeColor = System.Drawing.Color.White;
+            this.textBox1.Location = new System.Drawing.Point(155, 109);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(69, 33);
+            this.textBox1.TabIndex = 26;
+            this.textBox1.Text = "1000";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label11.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.label11.Location = new System.Drawing.Point(151, 82);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(116, 23);
+            this.label11.TabIndex = 25;
+            this.label11.Text = "Ping timeout:";
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(42)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(667, 270);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxLoginClickDelay);
             this.Controls.Add(this.label8);
@@ -364,5 +405,8 @@
         public System.Windows.Forms.TextBox textBoxUsernameElementId;
         private System.Windows.Forms.Label label7;
         public System.Windows.Forms.TextBox textBoxLoginClickDelay;
+        private System.Windows.Forms.Label label10;
+        public System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label11;
     }
 }
