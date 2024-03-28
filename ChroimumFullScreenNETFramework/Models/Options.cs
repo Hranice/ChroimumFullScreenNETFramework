@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace ChroimumFullScreenNETFramework.Models
         public string Url { get; set; }
         public int RefreshInterval { get; set; }
         public int PingTimeout { get; set; }
+        public int RetryCount { get; set; }
 
         public static event EventHandler<OptionsErrorEventArgs> OnError;
         public static event EventHandler<EventArgs> OnChange;
@@ -25,6 +27,7 @@ namespace ChroimumFullScreenNETFramework.Models
             {
                 string json = JsonConvert.SerializeObject(options, Formatting.Indented);
                 File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "options.json"), json);
+
                 OnChange?.Invoke(null, EventArgs.Empty);
             }
             catch (Exception ex)
