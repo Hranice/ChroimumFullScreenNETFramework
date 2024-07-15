@@ -58,11 +58,17 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
         private void label3_Click(object sender, EventArgs e)
         {
-            Enabled = false;
-            TopMost = false;
-            OpenOptionsDialog();
-            TopMost = true;
-            Enabled = true;
+            using (var pwddialog = new PasswordDialog("Zadejte heslo pro zobrazení nastavení."))
+            {
+                if (pwddialog.ShowDialog() == DialogResult.Yes)
+                {
+                    Enabled = false;
+                    TopMost = false;
+                    OpenOptionsDialog();
+                    TopMost = true;
+                    Enabled = true;
+                }
+            }
         }
 
         private void OpenOptionsDialog()
@@ -87,20 +93,32 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
         private void label4_Click(object sender, EventArgs e)
         {
-            if (label4.Text == "Zpět")
+            using (var pwddialog = new PasswordDialog("Zadejte heslo pro zobrazení lišty Windows."))
             {
-                Close();
-            }
-            else
-            {
-                keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY, 0);
-                keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
+                if (pwddialog.ShowDialog() == DialogResult.Yes)
+                {
+                    if (label4.Text == "Zpět")
+                    {
+                        Close();
+                    }
+                    else
+                    {
+                        keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                        keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
+                    }
+                }
             }
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            using (var pwddialog = new PasswordDialog("Zadejte heslo pro ukončení programu."))
+            {
+                if (pwddialog.ShowDialog() == DialogResult.Yes)
+                {
+                    Application.Exit();
+                }
+            }
         }
     }
 }

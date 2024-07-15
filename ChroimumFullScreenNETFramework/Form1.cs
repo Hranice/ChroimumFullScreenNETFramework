@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
 using ChroimumFullScreenNETFramework.Dialogs;
+using ChroimumFullScreenNETFramework.Helpers;
 using ChroimumFullScreenNETFramework.Models;
 using Serilog;
 using System;
@@ -251,6 +252,7 @@ namespace ChroimumFullScreenNETFramework
             };
             Controls.Add(browser);
 
+            browser.MenuHandler = new CustomContextMenuHandler();
             browser.JavascriptMessageReceived += OnJavascriptMessageReceived;
             browser.LoadingStateChanged += OnLoadingStateChanged;
         }
@@ -344,5 +346,12 @@ namespace ChroimumFullScreenNETFramework
         {
             unreachableDialog = new WebsiteUnreachableDialog();
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _logger.Information("The form has been closed. Reason: {closeReason}", e.CloseReason);
+        }
     }
+
+   
 }
