@@ -40,6 +40,9 @@ namespace ChroimumFullScreenNETFramework.Dialogs
 
             Options.OnChange += Options_OnChange;
             options = Options.Load();
+
+
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, 10);
         }
 
         private void Options_OnChange(object sender, EventArgs e)
