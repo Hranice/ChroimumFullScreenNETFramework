@@ -129,6 +129,7 @@
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "WebsiteUnreachableDialog";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebsiteUnreachableDialog_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

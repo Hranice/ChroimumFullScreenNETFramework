@@ -22,7 +22,7 @@ namespace ChroimumFullScreenNETFramework
         private ChromiumWebBrowser browser;
         private Timer checkUrlTimer;
         private WebsiteUnreachableDialog unreachableDialog;
-        private bool unreachableDialogShown;
+        private bool unreachableDialogShown, settingsDialogShown;
         private int pingRetryCount = 0;
         private bool isCheckingUrl;
 
@@ -194,7 +194,7 @@ namespace ChroimumFullScreenNETFramework
         {
             if (pingRetryCount > options.RetryCount) pingRetryCount = 0;
 
-            if (unreachableDialogShown)
+            if (unreachableDialogShown && !settingsDialogShown)
             {
                 _logger.Information($"Connected to '{options.Url}'.");
                 Enabled = true;
@@ -218,16 +218,28 @@ namespace ChroimumFullScreenNETFramework
                         BeginInvoke(new Action(() => pingRetryCount = 0));
                     }
                 }
+
+                // Close PasswordDialog form
+                foreach (Form openForm in Application.OpenForms)
+                {
+                    Debug.WriteLine(openForm.Name);
+
+                    if (openForm is PasswordDialog && openForm != this)
+                    {
+                        openForm.Close();
+                    }
+                }
             }
         }
 
         private void HandleFailure()
         {
-            if (!unreachableDialogShown)
+            if (!unreachableDialogShown && !settingsDialogShown)
             {
                 _logger.Warning($"Disconnected from '{options.Url}'. Refreshing interval is set to {options.RefreshInterval}");
                 Enabled = false;
-                unreachableDialog = unreachableDialog ?? new WebsiteUnreachableDialog();
+                unreachableDialog?.Dispose();
+                unreachableDialog = new WebsiteUnreachableDialog();
                 unreachableDialog.Show();
                 unreachableDialogShown = true;
             }
@@ -268,30 +280,36 @@ namespace ChroimumFullScreenNETFramework
 
             if (message.type == "single-click-or-tap")
             {
-                var unreachdia = new WebsiteUnreachableDialog("Dialog nastavení")
+                if (!unreachableDialogShown)
                 {
-                    TopMost = true
-                };
-                unreachdia.FormClosed += Unreachdia_FormClosed;
+                    if (InvokeRequired)
+                    {
+                        BeginInvoke(new Action(() => ShowSettingsDialog()));
+                    }
 
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new Action(() => Enabled = false));
-                }
-                unreachdia.ShowDialog();
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new Action(() => Enabled = true));
+                    else
+                    {
+                        ShowSettingsDialog();
+                    }
                 }
             }
         }
 
-        private void Unreachdia_FormClosed(object sender, FormClosedEventArgs e)
+        private void ShowSettingsDialog()
         {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(() => Enabled = true));
-            }
+            Enabled = false;
+            unreachableDialog?.Dispose();
+            unreachableDialog = new WebsiteUnreachableDialog("Dialog nastavení");
+            unreachableDialog.FormClosing += UnreachableDialog_FormClosing;
+            settingsDialogShown = true;
+            unreachableDialog.Show();
+            Enabled = true;
+        }
+
+        private void UnreachableDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            settingsDialogShown = false;
+            unreachableDialogShown = false;
         }
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
@@ -353,5 +371,5 @@ namespace ChroimumFullScreenNETFramework
         }
     }
 
-   
+
 }

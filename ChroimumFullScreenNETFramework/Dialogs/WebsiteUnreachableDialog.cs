@@ -65,11 +65,7 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             {
                 if (pwddialog.ShowDialog() == DialogResult.Yes)
                 {
-                    Enabled = false;
-                    TopMost = false;
                     OpenOptionsDialog();
-                    TopMost = true;
-                    Enabled = true;
                 }
             }
         }
@@ -94,21 +90,21 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             }
         }
 
+
         private void label4_Click(object sender, EventArgs e)
         {
-            using (var pwddialog = new PasswordDialog("Zadejte heslo pro zobrazení lišty Windows."))
+            if (label4.Text == "Zpět")
+            {
+                Close();
+                return;
+            }
+
+            using (var pwddialog = new PasswordDialog("Zadejte heslo pro zobrazení lišty."))
             {
                 if (pwddialog.ShowDialog() == DialogResult.Yes)
                 {
-                    if (label4.Text == "Zpět")
-                    {
-                        Close();
-                    }
-                    else
-                    {
-                        keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY, 0);
-                        keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
-                    }
+                    keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                    keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
                 }
             }
         }
