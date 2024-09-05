@@ -3,6 +3,7 @@ using CefSharp.WinForms;
 using ChroimumFullScreenNETFramework.Dialogs;
 using ChroimumFullScreenNETFramework.Helpers;
 using ChroimumFullScreenNETFramework.Models;
+using ChroimumFullScreenNETFramework.Properties;
 using Serilog;
 using System;
 using System.Diagnostics;
@@ -129,6 +130,9 @@ namespace ChroimumFullScreenNETFramework
             if (isCheckingUrl) return;
 
             isCheckingUrl = true;
+
+            unreachableDialog.StatusPictureBox.Image = Resources.loading_blue;
+
             try
             {
                 string url = PrepareInput(options.Url);
@@ -156,6 +160,7 @@ namespace ChroimumFullScreenNETFramework
             }
             catch (Exception ex)
             {
+                unreachableDialog.StatusPictureBox.Image = Resources.warning_red;
                 _logger.Error(ex.Message);
                 HandleFailure();
             }
@@ -190,40 +195,86 @@ namespace ChroimumFullScreenNETFramework
             return input;
         }
 
+        //private async Task HandleSuccess()
+        //{
+        //    if (unreachableDialogShown && !settingsDialogShown)
+        //    {
+        //        _logger.Information($"Connected to '{options.Url}'.");
+        //        var response = await browser.EvaluateScriptAsync("document.body.innerHTML");
+
+        //        if (response.Success && response.Result != null)
+        //        {
+        //            var bodyContent = response.Result.ToString();
+
+        //            if (string.IsNullOrWhiteSpace(bodyContent) || bodyContent.Contains("404"))
+        //            {
+        //                // Add a delay to prevent a tight retry loop
+        //                await Task.Delay(1000);
+
+        //                BeginInvoke((Action)(() =>
+        //                {
+        //                    browser.Reload();
+        //                }));
+        //            }
+        //            else
+        //            {
+        //                BeginInvoke((Action)(() =>
+        //                {
+        //                    _logger.Information($"Content retrieved from '{options.Url}'.");
+        //                    Enabled = true;
+        //                    unreachableDialog?.Hide();
+        //                    unreachableDialogShown = false;
+        //                }));
+        //            }
+        //        }
+
+        //        foreach (Form openForm in Application.OpenForms)
+        //        {
+        //            if (openForm is PasswordDialog && openForm != this)
+        //            {
+        //                openForm.Close();
+        //            }
+        //        }
+        //    }
+        //}
+
         private async Task HandleSuccess()
         {
-            if (pingRetryCount > options.RetryCount) pingRetryCount = 0;
-
             if (unreachableDialogShown && !settingsDialogShown)
             {
                 _logger.Information($"Connected to '{options.Url}'.");
-                Enabled = true;
-                unreachableDialog?.Hide();
-                unreachableDialogShown = false;
 
-                var response = await browser.EvaluateScriptAsync("document.body.innerHTML");
+                // Using JavaScript to get the status code, if supported by the browser
+                var response = await browser.EvaluateScriptAsync("fetch(window.location.href).then(res => res.status).catch(() => 404);");
+
                 if (response.Success && response.Result != null)
                 {
-                    var bodyContent = response.Result.ToString();
-                    if (string.IsNullOrWhiteSpace(bodyContent) || bodyContent.Contains("404"))
+                    int statusCode;
+                    if (int.TryParse(response.Result.ToString(), out statusCode) && statusCode == 200)
                     {
-                        BeginInvoke(new Action(() =>
+                        BeginInvoke((Action)(() =>
                         {
-                            browser.Reload();
-                            pingRetryCount++;
+                            _logger.Information($"Content retrieved from '{options.Url}'.");
+                            Enabled = true;
+                            unreachableDialog?.Hide();
+                            unreachableDialogShown = false;
                         }));
                     }
                     else
                     {
-                        BeginInvoke(new Action(() => pingRetryCount = 0));
+                        // Add a delay to prevent a tight retry loop
+                        await Task.Delay(1000);
+
+                        BeginInvoke((Action)(() =>
+                        {
+                            browser.Reload();
+                        }));
                     }
                 }
 
                 // Close PasswordDialog form
                 foreach (Form openForm in Application.OpenForms)
                 {
-                    Debug.WriteLine(openForm.Name);
-
                     if (openForm is PasswordDialog && openForm != this)
                     {
                         openForm.Close();
@@ -367,6 +418,7 @@ namespace ChroimumFullScreenNETFramework
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Options.Save(options);
             _logger.Information("The form has been closed. Reason: {closeReason}", e.CloseReason);
         }
     }

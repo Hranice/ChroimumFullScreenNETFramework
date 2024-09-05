@@ -16,7 +16,6 @@ namespace ChroimumFullScreenNETFramework.Models
         public string Url { get; set; }
         public int RefreshInterval { get; set; }
         public int PingTimeout { get; set; }
-        public int RetryCount { get; set; }
 
         public static event EventHandler<OptionsErrorEventArgs> OnError;
         public static event EventHandler<EventArgs> OnChange;
@@ -40,17 +39,32 @@ namespace ChroimumFullScreenNETFramework.Models
         {
             try
             {
-                if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "options.json")))
-                    Save(new Options());
+                string sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "options.json");
+                string tempPath = Path.Combine(Path.GetTempPath(), "options_backup.json");
 
-                string json = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "options.json"));
+                if (!File.Exists(sourcePath))
+                {
+                    Save(new Options());
+                }
+
+                // Copy to temp path if it exists
+                if (File.Exists(sourcePath))
+                {
+                    File.Copy(sourcePath, tempPath, true);
+                }
+
+                string json = File.ReadAllText(sourcePath);
                 var options = JsonConvert.DeserializeObject<Options>(json);
 
                 if (options.RefreshInterval == 0)
+                {
                     OnError?.Invoke(null, new OptionsErrorEventArgs(new Exception("Refresh interval cannot be set to 0.")));
+                }
 
                 if (String.IsNullOrEmpty(options.Url))
+                {
                     OnError?.Invoke(null, new OptionsErrorEventArgs(new Exception("Url cannot be null.")));
+                }
 
                 return options;
             }

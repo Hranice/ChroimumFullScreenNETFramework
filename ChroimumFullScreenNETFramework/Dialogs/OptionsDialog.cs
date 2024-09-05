@@ -1,13 +1,6 @@
 ﻿using ChroimumFullScreenNETFramework.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ChroimumFullScreenNETFramework.Dialogs
@@ -28,7 +21,6 @@ namespace ChroimumFullScreenNETFramework.Dialogs
             textBoxUrlInput.Text = Options.Url;
             textBoxIntervalInput.Text = Options.RefreshInterval.ToString();
             textBoxPingTimeoutInput.Text = Options.PingTimeout.ToString();
-            textBoxRetryCountInput.Text = Options.RetryCount.ToString();
         }
 
         private void ReopenWindowsKeyboard()
@@ -79,16 +71,8 @@ namespace ChroimumFullScreenNETFramework.Dialogs
                 MessageBox.Show("The Ping Timeout must be a numeric value!", "Input Error");
                 return;            }
 
-            // Attempt to parse the retry count from the textBox
-            if (!int.TryParse(textBoxRetryCountInput.Text, out int retryCount))
-            {
-                MessageBox.Show("The Retry Count must be a numeric value!", "Input Error");
-                return;
-            }
-
             Options.RefreshInterval = interval;
             Options.PingTimeout = pingTimeout;
-            Options.RetryCount = retryCount;
         }
     }
 }

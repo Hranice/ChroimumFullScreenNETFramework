@@ -119,5 +119,10 @@ namespace ChroimumFullScreenNETFramework.Dialogs
                 }
             }
         }
+
+        private void StatusPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

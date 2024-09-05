@@ -63,6 +63,16 @@ namespace ChroimumFullScreenNETFramework.Properties {
         /// <summary>
         ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap loading_blue {
+            get {
+                object obj = ResourceManager.GetObject("loading_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_360x110_c {
             get {
                 object obj = ResourceManager.GetObject("logo_360x110_c", resourceCulture);
@@ -76,6 +86,16 @@ namespace ChroimumFullScreenNETFramework.Properties {
         internal static System.Drawing.Bitmap logo_360x110_z {
             get {
                 object obj = ResourceManager.GetObject("logo_360x110_z", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap warning_red {
+            get {
+                object obj = ResourceManager.GetObject("warning_red", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
