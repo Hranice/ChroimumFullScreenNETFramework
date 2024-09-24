@@ -322,39 +322,41 @@ namespace ChroimumFullScreenNETFramework
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
-            if (!e.IsLoading)
+            if (!e.IsLoading && browser.CanExecuteJavascriptInMainFrame)
             {
                 const string clickScript = @"
-                    document.addEventListener('click', function(event) {
-                        const rect = { left: 10, top: 10, width: 50, height: 50 };
-                        const x = event.clientX;
-                        const y = event.clientY;
+            document.addEventListener('click', function(event) {
+                const rect = { left: 10, top: 10, width: 50, height: 50 };
+                const x = event.clientX;
+                const y = event.clientY;
 
-                        if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
-                            CefSharp.PostMessage({ type: 'single-click-or-tap', x: x, y: y });
-                        }
-                    });
-                ";
-                browser.ExecuteScriptAsync(clickScript);
+                if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
+                    CefSharp.PostMessage({ type: 'single-click-or-tap', x: x, y: y });
+                }
+            });
+        ";
+
+                browser.GetMainFrame().ExecuteJavaScriptAsync(clickScript);
 
                 const string formElementScript = @"
-                    Array.from(document.querySelectorAll('input, textarea')).forEach(function(element) {
-                        element.addEventListener('click', function() {
-                            var elementType = element.tagName.toLowerCase();
-                            if (element.type) {
-                                elementType += ':' + element.type.toLowerCase();
-                            }
-                            CefSharp.PostMessage({ 
-                                type: 'element-click', 
-                                elementType: elementType, 
-                                value: element.value || '' 
-                            });
-                        });
+            Array.from(document.querySelectorAll('input, textarea')).forEach(function(element) {
+                element.addEventListener('click', function() {
+                    var elementType = element.tagName.toLowerCase();
+                    if (element.type) {
+                        elementType += ':' + element.type.toLowerCase();
+                    }
+                    CefSharp.PostMessage({ 
+                        type: 'element-click', 
+                        elementType: elementType, 
+                        value: element.value || '' 
                     });
-                ";
-                browser.ExecuteScriptAsync(formElementScript);
+                });
+            });
+        ";
+                browser.GetMainFrame().ExecuteJavaScriptAsync(formElementScript);
             }
         }
+
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {

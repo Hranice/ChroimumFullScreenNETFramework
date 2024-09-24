@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChroimumFullScreenNETFramework", "ChroimumFullScreenNETFramework\ChroimumFullScreenNETFramework.csproj", "{C123D33F-99D3-40C9-A422-82B5FCBCC4E7}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "WapProjTemplate1", "WapProjTemplate1\WapProjTemplate1.wapproj", "{65365EBE-9925-4DB7-9932-CCE90FDE8DC0}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "VizualizaceInstaller", "WapProjTemplate1\VizualizaceInstaller.wapproj", "{65365EBE-9925-4DB7-9932-CCE90FDE8DC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
