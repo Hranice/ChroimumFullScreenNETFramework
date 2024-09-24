@@ -9,7 +9,7 @@
   <Identity
     Name="7e368bd7-a175-473b-9537-cea674958e37"
     Publisher="CN=dm-admin, OU=Service-Admins, DC=heinz-holding, DC=local"
-    Version="1.0.5.0" />
+    Version="1.0.6.0" />
 
   <Properties>
     <DisplayName>Vizualizace Wrapper</DisplayName>
