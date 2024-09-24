@@ -195,49 +195,6 @@ namespace ChroimumFullScreenNETFramework
             return input;
         }
 
-        //private async Task HandleSuccess()
-        //{
-        //    if (unreachableDialogShown && !settingsDialogShown)
-        //    {
-        //        _logger.Information($"Connected to '{options.Url}'.");
-        //        var response = await browser.EvaluateScriptAsync("document.body.innerHTML");
-
-        //        if (response.Success && response.Result != null)
-        //        {
-        //            var bodyContent = response.Result.ToString();
-
-        //            if (string.IsNullOrWhiteSpace(bodyContent) || bodyContent.Contains("404"))
-        //            {
-        //                // Add a delay to prevent a tight retry loop
-        //                await Task.Delay(1000);
-
-        //                BeginInvoke((Action)(() =>
-        //                {
-        //                    browser.Reload();
-        //                }));
-        //            }
-        //            else
-        //            {
-        //                BeginInvoke((Action)(() =>
-        //                {
-        //                    _logger.Information($"Content retrieved from '{options.Url}'.");
-        //                    Enabled = true;
-        //                    unreachableDialog?.Hide();
-        //                    unreachableDialogShown = false;
-        //                }));
-        //            }
-        //        }
-
-        //        foreach (Form openForm in Application.OpenForms)
-        //        {
-        //            if (openForm is PasswordDialog && openForm != this)
-        //            {
-        //                openForm.Close();
-        //            }
-        //        }
-        //    }
-        //}
-
         private async Task HandleSuccess()
         {
             if (unreachableDialogShown && !settingsDialogShown)
@@ -422,6 +379,4 @@ namespace ChroimumFullScreenNETFramework
             _logger.Information("The form has been closed. Reason: {closeReason}", e.CloseReason);
         }
     }
-
-
 }
