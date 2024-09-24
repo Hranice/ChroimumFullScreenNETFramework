@@ -16,7 +16,7 @@ namespace ChroimumFullScreenNETFramework
         static void Main()
         {
             Log.Logger = new LoggerConfiguration()
-          .MinimumLevel.Information()
+          .MinimumLevel.Debug()
           .WriteTo.Console()
           .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
           .CreateLogger();
