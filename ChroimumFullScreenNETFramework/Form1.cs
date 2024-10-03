@@ -6,6 +6,7 @@ using ChroimumFullScreenNETFramework.Models;
 using ChroimumFullScreenNETFramework.Properties;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
@@ -45,6 +46,24 @@ namespace ChroimumFullScreenNETFramework
             SetupTimer();
             MakeFormFullscreen();
         }
+
+       
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            if (!unreachableDialogShown)
+            {
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new Action(() => ShowSettingsDialog()));
+                }
+                else
+                {
+                    ShowSettingsDialog();
+                }
+            }
+        }
+
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -272,14 +291,57 @@ namespace ChroimumFullScreenNETFramework
             };
             Controls.Add(browser);
 
+            // prevents user right click context menu
             browser.MenuHandler = new CustomContextMenuHandler();
-            browser.JavascriptMessageReceived += OnJavascriptMessageReceived;
+
+            // buggy javascript
             browser.LoadingStateChanged += OnLoadingStateChanged;
+            browser.JavascriptMessageReceived += OnJavascriptMessageReceived;
         }
 
-        private void StartTabTipIfNotRunning()
+        private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
-            Process.Start("osk.exe");
+            if (browser.IsBrowserInitialized)
+            {
+                InjectClickDetectionScript();
+            }
+        }
+
+        private void InjectClickDetectionScript()
+        {
+            if (browser.CanExecuteJavascriptInMainFrame)
+            {
+                const string clickScript = @"
+            document.addEventListener('click', function(event) {
+                const rect = { left: 10, top: 10, width: 50, height: 50 };
+                const x = event.clientX;
+                const y = event.clientY;
+
+                if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
+                    CefSharp.PostMessage({ type: 'single-click-or-tap', x: x, y: y });
+                }
+            });
+        ";
+
+                browser.GetMainFrame().ExecuteJavaScriptAsync(clickScript);
+
+                const string formElementScript = @"
+            Array.from(document.querySelectorAll('input, textarea')).forEach(function(element) {
+                element.addEventListener('click', function() {
+                    var elementType = element.tagName.toLowerCase();
+                    if (element.type) {
+                        elementType += ':' + element.type.toLowerCase();
+                    }
+                    CefSharp.PostMessage({ 
+                        type: 'element-click', 
+                        elementType: elementType, 
+                        value: element.value || '' 
+                    });
+                });
+            });
+        ";
+                browser.GetMainFrame().ExecuteJavaScriptAsync(formElementScript);
+            }
         }
 
         private void OnJavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
@@ -320,43 +382,6 @@ namespace ChroimumFullScreenNETFramework
             unreachableDialogShown = false;
         }
 
-        private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            if (!e.IsLoading && browser.CanExecuteJavascriptInMainFrame)
-            {
-                const string clickScript = @"
-            document.addEventListener('click', function(event) {
-                const rect = { left: 10, top: 10, width: 50, height: 50 };
-                const x = event.clientX;
-                const y = event.clientY;
-
-                if(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height) {
-                    CefSharp.PostMessage({ type: 'single-click-or-tap', x: x, y: y });
-                }
-            });
-        ";
-
-                browser.GetMainFrame().ExecuteJavaScriptAsync(clickScript);
-
-                const string formElementScript = @"
-            Array.from(document.querySelectorAll('input, textarea')).forEach(function(element) {
-                element.addEventListener('click', function() {
-                    var elementType = element.tagName.toLowerCase();
-                    if (element.type) {
-                        elementType += ':' + element.type.toLowerCase();
-                    }
-                    CefSharp.PostMessage({ 
-                        type: 'element-click', 
-                        elementType: elementType, 
-                        value: element.value || '' 
-                    });
-                });
-            });
-        ";
-                browser.GetMainFrame().ExecuteJavaScriptAsync(formElementScript);
-            }
-        }
-
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -381,4 +406,5 @@ namespace ChroimumFullScreenNETFramework
             _logger.Information("The form has been closed. Reason: {closeReason}", e.CloseReason);
         }
     }
+
 }
